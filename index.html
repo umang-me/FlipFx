@@ -4,10 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="images/favicon.png" type="image/x-icon">
   <title>Flip Clock</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <!-- FlipClock.js v1 from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/flipclock@^1/dist/FlipClock.umd.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -24,8 +25,8 @@
       </div>
     </div>
 
-    <!-- Clock face (digits injected by JS) -->
-    <div class="clock-face" id="clockFace"></div>
+    <!-- FlipClock renders here -->
+    <div id="clockFace"></div>
 
   </div>
 

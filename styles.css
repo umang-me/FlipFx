@@ -1,50 +1,60 @@
-:root { --t: 0.45s cubic-bezier(.4,0,.2,1); }
+/* ─── CSS custom properties ──────────────────────────────────────── */
+:root {
+  --t: 0.4s cubic-bezier(.4, 0, .2, 1);
+  /* card sizing — drives FlipClock card dimensions */
+  --card-size: clamp(72px, 15vw, 180px);
+  --card-font: calc(var(--card-size) * 0.78);
+}
 
 [data-theme="dark"] {
-  --bg:           #0d0d0f;
-  --card-top:     #222228;
-  --card-bot:     #18181e;
-  --card-flip:    #1c1c22;
-  --card-line:    #0d0d0f;
-  --card-shine:   rgba(255,255,255,.04);
-  --text:         #f0ede8;
-  --dim:          #5a5860;
-  --accent:       #e8c547;
-  --accent2:      #d4523e;
-  --btn:          #1c1c22;
-  --btn-h:        #28282f;
-  --shadow:       0 20px 50px rgba(0,0,0,.7), 0 4px 12px rgba(0,0,0,.5);
-  --panel-bg:     #16161c;
-  --panel-b:      #2a2a34;
-  --input-bg:     #0d0d0f;
-  --overlay:      rgba(0,0,0,.78);
-}
-[data-theme="light"] {
-  --bg:           #edeae3;
-  --card-top:     #f8f6f2;
-  --card-bot:     #edeae6;
-  --card-flip:    #ffffff;
-  --card-line:    #d8d5cf;
-  --card-shine:   rgba(255,255,255,.55);
-  --text:         #1a1814;
-  --dim:          #9e9b96;
-  --accent:       #c8943a;
-  --accent2:      #c04030;
-  --btn:          #e0ddd6;
-  --btn-h:        #d4d0c8;
-  --shadow:       0 20px 50px rgba(0,0,0,.13), 0 4px 12px rgba(0,0,0,.07);
-  --panel-bg:     #f5f2ec;
-  --panel-b:      #d8d5cf;
-  --input-bg:     #e8e5de;
-  --overlay:      rgba(0,0,0,.42);
+  --bg: #1a1712;
+  --card-bg: #252220;
+  --seam: #0c0b0a;
+  --text: #f0ebe2;
+  --dim: #5c5750;
+  --accent: #e8c547;
+  --accent2: #d4523e;
+  --btn: #2c2a27;
+  --btn-h: #3a3835;
+  --shadow: 0 8px 32px rgba(0, 0, 0, .8), 0 2px 8px rgba(0, 0, 0, .55);
+  --shine: rgba(255, 255, 255, .03);
+  --panel-bg: #1c1a17;
+  --panel-b: #38342f;
+  --input-bg: #111;
+  --overlay: rgba(0, 0, 0, .82);
+  --dot: var(--accent);
 }
 
-/* ─── Reset ────────────────────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[data-theme="light"] {
+  --bg: #c5bba8;
+  --card-bg: #252220;
+  --seam: #0c0b0a;
+  --text: #f0ebe2;
+  --dim: #9e9b96;
+  --accent: #c8943a;
+  --accent2: #c04030;
+  --btn: #ddd8ce;
+  --btn-h: #ccc7bc;
+  --shadow: 0 8px 32px rgba(0, 0, 0, .45), 0 2px 8px rgba(0, 0, 0, .28);
+  --shine: rgba(255, 255, 255, .06);
+  --panel-bg: #f4f0e8;
+  --panel-b: #d5d0c8;
+  --input-bg: #e8e4dc;
+  --overlay: rgba(0, 0, 0, .48);
+  --dot: var(--accent);
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
 html {
   height: 100%;
-  overflow-x: hidden;
 }
 
 body {
@@ -56,55 +66,26 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow-x: hidden;
-  transition: background var(--t), color var(--t);
+  transition: background var(--t);
 }
 
-/* Grid texture */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.015) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-}
-[data-theme="light"] body::before {
-  background-image:
-    linear-gradient(rgba(0,0,0,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,.035) 1px, transparent 1px);
-}
-
-/* ─── Outer shell ──────────────────────────────────────────────── */
-/*  This single container drives ALL sizes via --s (digit size px)  */
+/* ─── Wrapper ─────────────────────────────────────────────────────── */
 .clock-wrapper {
-  /* --s = one digit card width. Everything else is derived from it. */
-  --s: clamp(60px, 14vw, 280px);
-  --h: calc(var(--s) * 1.6);         /* taller cards */
-  --fs: calc(var(--s) * 0.7);        /* smaller font */
-  --gap: calc(var(--s) * 0.1);       /* inter-digit gap              */
-  --col: calc(var(--s) * 0.14);      /* colon dot size               */
-  --col-gap: calc(var(--s) * 0.28);  /* gap between colon dots       */
-  --col-pad: calc(var(--s) * 0.14);  /* colon horizontal padding     */
-  --lbl: calc(var(--s) * 0.1);       /* label font size              */
-
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--s) * 0.28);
+  gap: clamp(20px, 4vw, 40px);
+  padding: clamp(20px, 4vw, 40px) clamp(16px, 3vw, 32px);
   width: 100%;
-  max-width: 100%;
-  padding: calc(var(--s) * 0.32) calc(var(--s) * 0.28);
 }
 
-/* ─── Top bar ──────────────────────────────────────────────────── */
+/* ─── Top bar ─────────────────────────────────────────────────────── */
 .top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  max-width: 900px;
 }
 
 .logo {
@@ -116,206 +97,203 @@ body::before {
   transition: color var(--t);
 }
 
-.bar-actions { display: flex; gap: 8px; }
+.bar-actions {
+  display: flex;
+  gap: 8px;
+}
 
 .icon-btn {
-  width: clamp(28px, 6vw, 36px);
-  height: clamp(28px, 6vw, 36px);
+  width: clamp(30px, 6vw, 38px);
+  height: clamp(30px, 6vw, 38px);
   border: none;
   background: var(--btn);
   color: var(--dim);
   border-radius: 9px;
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: clamp(12px, 3vw, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(13px, 3vw, 16px);
   flex-shrink: 0;
   transition: background .2s, color .2s, transform .15s;
 }
-.icon-btn:hover  { background: var(--btn-h); color: var(--text); transform: scale(1.08); }
-.icon-btn:active { transform: scale(.94); }
 
-/* ─── Clock face ───────────────────────────────────────────────── */
-.clock-face {
+.icon-btn:hover {
+  background: var(--btn-h);
+  color: var(--text);
+  transform: scale(1.08);
+}
+
+.icon-btn:active {
+  transform: scale(.93);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FLIPCLOCK.JS OVERRIDES
+   The library injects its own HTML/CSS. We override below.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Container the library renders into */
+#clockFace {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: nowrap;          /* stay on one line — scale drives fit */
-  gap: 0;
   width: 100%;
 }
 
-/* ─── Segment (2 digits + label) ──────────────────────────────── */
-.segment-wrap {
+/* The root flipclock element */
+.flip-clock {
+  font-family: 'Bebas Neue', sans-serif !important;
+  font-size: var(--card-font) !important;
+  gap: 0 !important;
+  align-items: center !important;
+}
+
+/* Each digit group (hh, mm, ss) */
+.flip-clock-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(var(--s) * 0.07);
+  gap: clamp(4px, 1vw, 8px);
 }
 
-.digit-group {
-  display: flex;
-  gap: var(--gap);
+.flip-clock-group+.flip-clock-group {
+  margin-left: 0 !important;
 }
 
-.segment-label {
-  font-size: max(7px, var(--lbl));
-  letter-spacing: .25em;
-  color: var(--dim);
+/* Label below each group */
+.flip-clock-label {
+  font-family: 'Share Tech Mono', monospace !important;
+  font-size: clamp(7px, 1.2vw, 11px) !important;
+  letter-spacing: .2em !important;
+  color: var(--dim) !important;
   text-transform: uppercase;
+  margin-bottom: 0 !important;
   transition: color var(--t);
 }
 
-/* ─── Colon ────────────────────────────────────────────────────── */
-.colon {
+/* Group items row */
+.flip-clock-group-items {
+  gap: clamp(4px, 0.8vw, 8px) !important;
+  align-items: center !important;
+}
+
+/* Each individual digit card */
+.flip-clock-card {
+  width: var(--card-size) !important;
+  height: var(--card-size) !important;
+  /* SQUARE */
+  border-radius: calc(var(--card-size) * 0.1) !important;
+  box-shadow: var(--shadow) !important;
+  color: var(--text) !important;
+  font-weight: 400 !important;
+}
+
+/* The inner halves — both same color */
+.flip-clock-card-item-inner .top,
+.flip-clock-card-item-inner .bottom {
+  background: var(--card-bg) !important;
+  box-shadow: none !important;
+}
+
+/* Top half */
+.flip-clock-card-item-inner .top {
+  border-radius: calc(var(--card-size) * 0.1) calc(var(--card-size) * 0.1) 0 0 !important;
+  /* line-height trick: make the digit vertically centered in the full card */
+  line-height: var(--card-size) !important;
+}
+
+/* Subtle top shine */
+.flip-clock-card-item-inner .top::after {
+  background: linear-gradient(to bottom, var(--shine), transparent 60%) !important;
+  display: block !important;
+}
+
+/* Bottom half */
+.flip-clock-card-item-inner .bottom {
+  border-radius: 0 0 calc(var(--card-size) * 0.1) calc(var(--card-size) * 0.1) !important;
+  line-height: 0 !important;
+}
+
+/* Seam line between halves */
+.flip-clock-card-item-inner .top::before {
+  background: var(--seam) !important;
+  height: 2px !important;
+  opacity: 1 !important;
+  z-index: 10;
+}
+
+/* Shadow overlays during animation */
+.flip-clock-card-item-inner .top:after,
+.flip-clock-card-item-inner .bottom:after {
+  border-radius: inherit !important;
+}
+
+/* Colon / divider between groups */
+.flip-clock-divider {
+  height: var(--card-size) !important;
+  padding: 0 clamp(4px, 1vw, 12px) !important;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: var(--col-gap);
-  padding: 0 var(--col-pad);
-  margin-bottom: calc(var(--lbl) + 4px); /* align with digit centre */
-  flex-shrink: 0;
+  justify-content: center;
+  gap: calc(var(--card-size) * 0.2);
+  /* remove default colon character — we render our own dots */
+  color: transparent !important;
+  font-size: 0 !important;
+  /* push up to align with card centre (offset the label below) */
+  margin-bottom: clamp(18px, 3vw, 26px);
 }
 
-.colon-dot {
-  width: var(--col);
-  height: var(--col);
-  border-radius: 50%;
-  background: var(--accent);
-  transition: background var(--t), opacity .4s;
+.flip-clock-divider-inner {
+  display: none !important;
+  /* hide the text ":" */
 }
 
-.colon.blink .colon-dot { animation: blink 1s step-start infinite; }
-@keyframes blink { 50% { opacity: .12; } }
-
-/* ─── Flip digit card ──────────────────────────────────────────── */
-.flip-digit {
-  position: relative;
-  width:  var(--s);
-  height: var(--h);
-  perspective: calc(var(--s) * 6);
-  flex-shrink: 0;
-}
-
-/* Static backing card */
-.card {
-  position: absolute;
-  inset: 0;
-  border-radius: calc(var(--s) * 0.1);
-  overflow: hidden;
-  box-shadow: var(--shadow);
-  transition: box-shadow var(--t);
-}
-
-.card-top {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 50%;
-  background: var(--card-top);
-  display: flex; align-items: flex-end; justify-content: center;
-  overflow: hidden;
-  border-radius: calc(var(--s) * 0.1) calc(var(--s) * 0.1) 0 0;
-  transition: background var(--t);
-  z-index: 1;
-}
-.card-top::after {
+/* Inject two dot pseudo-elements to replace the divider */
+.flip-clock-divider::before,
+.flip-clock-divider::after {
   content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, var(--card-shine), transparent 70%);
-  pointer-events: none;
-}
-
-.card-bot {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 50%;
-  background: var(--card-bot);
-  display: flex; align-items: flex-start; justify-content: center;
-  overflow: hidden;
-  border-radius: 0 0 calc(var(--s) * 0.1) calc(var(--s) * 0.1);
-  transition: background var(--t);
-  z-index: 1;
-}
-
-.card-line {
-  position: absolute;
-  top: 50%; left: 0; right: 0;
-  height: 2px;
-  background: var(--card-line);
-  z-index: 10;
+  display: block;
+  width: calc(var(--card-size) * 0.1);
+  height: calc(var(--card-size) * 0.1);
+  border-radius: 50%;
+  background: var(--dot);
   transition: background var(--t);
 }
 
-/* Digit numeral — size is driven by --fs which tracks --s exactly */
-.digit-text {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: var(--fs);
-  line-height: 1;
-  color: var(--text);
-  user-select: none;
-  position: relative;
-  white-space: nowrap;
-  transition: color var(--t);
-}
-.card-top .digit-text { transform: translateY(50%); }
-.card-bot .digit-text { transform: translateY(-50%); }
-
-/* ─── Animated flip panels ─────────────────────────────────────── */
-.flip-top, .flip-bot {
-  position: absolute;
-  left: 0; right: 0;
-  height: 50%;
-  background: var(--card-flip);
-  display: flex; align-items: flex-end; justify-content: center;
-  overflow: hidden;
-  transform-origin: bottom center;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-  border-radius: calc(var(--s) * 0.1) calc(var(--s) * 0.1) 0 0;
-  z-index: 5;
-  transition: background var(--t);
-}
-.flip-bot {
-  top: 50%;
-  align-items: flex-start;
-  transform-origin: top center;
-  border-radius: 0 0 calc(var(--s) * 0.1) calc(var(--s) * 0.1);
+/* Blink the hours colon */
+.flip-clock-divider:first-of-type::before,
+.flip-clock-divider:first-of-type::after {
+  animation: blink 1s step-start infinite;
 }
 
-.flip-top.animating { animation: ftop .3s ease-in  forwards; }
-.flip-bot.animating { animation: fbot .3s ease-out .28s forwards; }
-
-@keyframes ftop { to   { transform: rotateX(-90deg); } }
-@keyframes fbot { from { transform: rotateX( 90deg); } to { transform: rotateX(0deg); } }
-
-/* ─── AM/PM ────────────────────────────────────────────────────── */
-.ampm-badge {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: calc(var(--s) * 0.26);
-  letter-spacing: .1em;
-  color: var(--accent);
-  align-self: flex-end;
-  padding-bottom: calc(var(--lbl) + calc(var(--s) * 0.32));
-  padding-left: calc(var(--s) * 0.08);
-  flex-shrink: 0;
-  transition: color var(--t), opacity .3s;
-  min-width: calc(var(--s) * 0.4);
+@keyframes blink {
+  50% {
+    opacity: .1;
+  }
 }
-.ampm-badge.hidden { opacity: 0; pointer-events: none; }
 
-/* ─── Settings overlay ─────────────────────────────────────────── */
+/* ─── Settings overlay ─────────────────────────────────────────────── */
 .overlay {
-  position: fixed; inset: 0;
+  position: fixed;
+  inset: 0;
   background: var(--overlay);
   backdrop-filter: blur(8px);
   z-index: 100;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 16px;
-  opacity: 0; pointer-events: none;
+  opacity: 0;
+  pointer-events: none;
   transition: opacity .3s;
 }
-.overlay.open { opacity: 1; pointer-events: all; }
+
+.overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
 
 .panel {
   background: var(--panel-bg);
@@ -325,11 +303,14 @@ body::before {
   width: min(400px, 100%);
   max-height: calc(100dvh - 32px);
   overflow-y: auto;
-  box-shadow: 0 32px 80px rgba(0,0,0,.4);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, .4);
   transform: translateY(16px) scale(.97);
-  transition: transform .3s cubic-bezier(.4,0,.2,1), background var(--t), border-color var(--t);
+  transition: transform .3s cubic-bezier(.4, 0, .2, 1), background var(--t), border-color var(--t);
 }
-.overlay.open .panel { transform: none; }
+
+.overlay.open .panel {
+  transform: none;
+}
 
 .panel-title {
   font-family: 'Bebas Neue', sans-serif;
@@ -340,7 +321,9 @@ body::before {
   transition: color var(--t);
 }
 
-.panel-section { margin-bottom: 18px; }
+.panel-section {
+  margin-bottom: 18px;
+}
 
 .panel-label {
   font-size: 10px;
@@ -352,7 +335,9 @@ body::before {
 }
 
 .toggle-row {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 10px 14px;
   background: var(--input-bg);
   border-radius: 10px;
@@ -362,32 +347,58 @@ body::before {
   transition: background var(--t), color var(--t);
 }
 
-/* Toggle switch */
-.switch { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
-.switch input { opacity: 0; width: 0; height: 0; }
+.switch {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
 .switch-track {
-  position: absolute; inset: 0;
+  position: absolute;
+  inset: 0;
   border-radius: 22px;
   background: var(--btn);
   cursor: pointer;
   transition: background .25s;
 }
+
 .switch-track::after {
   content: '';
   position: absolute;
-  top: 3px; left: 3px;
-  width: 16px; height: 16px;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: var(--dim);
   transition: transform .25s, background .25s;
 }
-.switch input:checked + .switch-track { background: var(--accent); }
-.switch input:checked + .switch-track::after { transform: translateX(18px); background: #fff; }
 
-.time-input-row { display: flex; gap: 8px; align-items: center; }
+.switch input:checked+.switch-track {
+  background: var(--accent);
+}
+
+.switch input:checked+.switch-track::after {
+  transform: translateX(18px);
+  background: #fff;
+}
+
+.time-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
 
 .styled-input {
-  flex: 1; min-width: 0;
+  flex: 1;
+  min-width: 0;
   background: var(--input-bg);
   border: 1px solid var(--panel-b);
   border-radius: 9px;
@@ -398,7 +409,10 @@ body::before {
   outline: none;
   transition: border-color .2s, background var(--t), color var(--t);
 }
-.styled-input:focus { border-color: var(--accent); }
+
+.styled-input:focus {
+  border-color: var(--accent);
+}
 
 .accent-btn {
   background: var(--accent);
@@ -414,23 +428,52 @@ body::before {
   flex-shrink: 0;
   transition: opacity .2s, transform .15s;
 }
-.accent-btn:hover  { opacity: .85; }
-.accent-btn:active { transform: scale(.95); }
-.accent-btn.muted  { background: var(--btn); color: var(--text); }
-.accent-btn.full   { width: 100%; margin-top: 6px; }
 
-/* ─── Alarm alert ──────────────────────────────────────────────── */
+.accent-btn:hover {
+  opacity: .85;
+}
+
+.accent-btn:active {
+  transform: scale(.95);
+}
+
+.accent-btn.muted {
+  background: var(--btn);
+  color: var(--text);
+}
+
+.accent-btn.full {
+  width: 100%;
+  margin-top: 6px;
+}
+
+/* ─── Alarm alert ──────────────────────────────────────────────────── */
 .alarm-alert {
-  position: fixed; inset: 0;
+  position: fixed;
+  inset: 0;
   z-index: 200;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 16px;
-  background: rgba(0,0,0,.85);
-  opacity: 0; pointer-events: none;
+  background: rgba(0, 0, 0, .85);
+  opacity: 0;
+  pointer-events: none;
   transition: opacity .4s;
 }
-.alarm-alert.ringing { opacity: 1; pointer-events: all; animation: afl 1s ease-in-out infinite alternate; }
-@keyframes afl { to { background: rgba(216,80,60,.18); } }
+
+.alarm-alert.ringing {
+  opacity: 1;
+  pointer-events: all;
+  animation: afl 1s ease-in-out infinite alternate;
+}
+
+@keyframes afl {
+  to {
+    background: rgba(216, 80, 60, .18);
+  }
+}
 
 .alarm-box {
   background: var(--panel-bg);
@@ -438,17 +481,35 @@ body::before {
   border-radius: 20px;
   padding: clamp(24px, 6vw, 44px) clamp(24px, 8vw, 52px);
   text-align: center;
-  box-shadow: 0 0 60px rgba(216,80,60,.4);
+  box-shadow: 0 0 60px rgba(216, 80, 60, .4);
   max-width: min(360px, 100%);
   width: 100%;
 }
-.alarm-icon { font-size: clamp(32px, 8vw, 52px); animation: ring 1s ease-in-out infinite; display: block; }
-@keyframes ring {
-  20%  { transform: rotate(-18deg); }
-  40%  { transform: rotate(18deg); }
-  60%  { transform: rotate(-9deg); }
-  80%  { transform: rotate(9deg); }
+
+.alarm-icon {
+  font-size: clamp(32px, 8vw, 52px);
+  animation: ring 1s ease-in-out infinite;
+  display: block;
 }
+
+@keyframes ring {
+  20% {
+    transform: rotate(-18deg);
+  }
+
+  40% {
+    transform: rotate(18deg);
+  }
+
+  60% {
+    transform: rotate(-9deg);
+  }
+
+  80% {
+    transform: rotate(9deg);
+  }
+}
+
 .alarm-label {
   font-family: 'Bebas Neue', sans-serif;
   font-size: clamp(22px, 6vw, 34px);
@@ -456,13 +517,25 @@ body::before {
   color: var(--accent2);
   margin: 12px 0 4px;
 }
-.alarm-time-display { font-size: 13px; color: var(--dim); margin-bottom: 20px; }
-.alarm-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
-/* ─── Snackbar ─────────────────────────────────────────────────── */
+.alarm-time-display {
+  font-size: 13px;
+  color: var(--dim);
+  margin-bottom: 20px;
+}
+
+.alarm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ─── Snackbar ─────────────────────────────────────────────────────── */
 .snack {
   position: fixed;
-  bottom: 24px; left: 50%;
+  bottom: 24px;
+  left: 50%;
   transform: translateX(-50%) translateY(16px);
   background: var(--panel-bg);
   border: 1px solid var(--panel-b);
@@ -471,10 +544,15 @@ body::before {
   border-radius: 10px;
   font-size: 13px;
   letter-spacing: 1px;
-  opacity: 0; pointer-events: none;
+  opacity: 0;
+  pointer-events: none;
   transition: opacity .3s, transform .3s;
   white-space: nowrap;
   z-index: 300;
   max-width: calc(100vw - 32px);
 }
-.snack.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.snack.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
