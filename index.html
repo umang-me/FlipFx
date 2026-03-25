@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flip Clock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="clock-wrapper">
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <span class="logo">FLIP · CLOCK</span>
+    <div class="bar-actions">
+      <button class="icon-btn" id="themeBtn"    title="Toggle theme">☀</button>
+      <button class="icon-btn" id="settingsBtn" title="Settings">⚙</button>
+    </div>
+  </div>
+
+  <!-- Clock face (digits injected by JS) -->
+  <div class="clock-face" id="clockFace"></div>
+
+</div>
+
+<!-- Settings overlay -->
+<div class="overlay" id="settingsOverlay">
+  <div class="panel" role="dialog" aria-modal="true">
+    <div class="panel-title">⚙ Settings</div>
+
+    <div class="panel-section">
+      <div class="panel-label">Display</div>
+      <div class="toggle-row">
+        <span>24-hour format</span>
+        <label class="switch"><input type="checkbox" id="toggle24h"><span class="switch-track"></span></label>
+      </div>
+      <div class="toggle-row">
+        <span>Show seconds</span>
+        <label class="switch"><input type="checkbox" id="toggleSec" checked><span class="switch-track"></span></label>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-label">Manual Time Override</div>
+      <div class="time-input-row">
+        <input class="styled-input" type="time" id="manualTime">
+        <button class="accent-btn" id="applyTime">Set</button>
+        <button class="accent-btn muted" id="resetTime">↺</button>
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="panel-label">Alarm</div>
+      <div class="time-input-row">
+        <input class="styled-input" type="time" id="alarmTime">
+        <button class="accent-btn" id="setAlarm">Set alarm</button>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:var(--dim);letter-spacing:1px" id="alarmStatus">No alarm set</div>
+    </div>
+
+    <button class="accent-btn full" id="closePanel">Close</button>
+  </div>
+</div>
+
+<!-- Alarm alert -->
+<div class="alarm-alert" id="alarmAlert">
+  <div class="alarm-box">
+    <span class="alarm-icon">🔔</span>
+    <div class="alarm-label">Alarm!</div>
+    <div class="alarm-time-display" id="alarmTimeDisplay"></div>
+    <div class="alarm-actions">
+      <button class="accent-btn" style="background:var(--accent2);color:#fff" id="dismissAlarm">Dismiss</button>
+      <button class="accent-btn" id="snoozeAlarm">Snooze 5m</button>
+    </div>
+  </div>
+</div>
+
+<!-- Snackbar -->
+<div class="snack" id="snack"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
