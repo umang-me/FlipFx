@@ -2,7 +2,6 @@
    STATE
 ═══════════════════════════════════════════════ */
 const state = {
-  use24h: false,
   showSec: true,
   theme: 'dark',
   offset: 0,          // ms offset for manual time override
@@ -19,16 +18,8 @@ const FC = window.FlipClock;
 let clockInstance = null;
 
 function getFormat() {
-  const h = state.use24h ? '[HH]' : '[hh]';
   const s = state.showSec ? ':[ss]' : '';
-  const a = (!state.use24h) ? '[A]' : '';
-  return `${h}:[mm]${s}${a}`;
-}
-
-function getLabels() {
-  const labels = ['hours', 'minutes'];
-  if (state.showSec) labels.push('seconds');
-  return labels;
+  return `[HH]:[mm]${s}`;
 }
 
 function buildClock() {
@@ -59,8 +50,17 @@ function buildClock() {
     }),
   });
 
-  // Inject group labels (hours / minutes / seconds) after the library renders
+  // Wrap the clock in a container for centering
   requestAnimationFrame(() => {
+    const clockEl = $('clockFace').querySelector('.flip-clock');
+    if (clockEl && !clockEl.parentElement.classList.contains('clock-container')) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'clock-container';
+      clockEl.parentNode.insertBefore(wrapper, clockEl);
+      wrapper.appendChild(clockEl);
+    }
+
+    // Inject group labels (hours / minutes / seconds) after the library renders
     const groups = $('clockFace').querySelectorAll('.flip-clock-group');
     const labels = getLabels();
     groups.forEach((g, i) => {
@@ -72,12 +72,6 @@ function buildClock() {
       }
       lbl.textContent = labels[i] || '';
     });
-
-    // Hide the AM/PM group label if present (it's not a time unit)
-    if (!state.use24h) {
-      const last = $('clockFace').querySelector('.flip-clock-group:last-child .flip-clock-label');
-      if (last) last.textContent = '';
-    }
   });
 }
 
@@ -111,7 +105,6 @@ $('settingsOverlay').onclick = e => {
   if (e.target === $('settingsOverlay')) $('settingsOverlay').classList.remove('open');
 };
 
-$('toggle24h').onchange = e => { state.use24h = e.target.checked; buildClock(); };
 $('toggleSec').onchange = e => { state.showSec = e.target.checked; buildClock(); };
 
 /* ─── Manual time override ───────────────────── */
@@ -132,9 +125,7 @@ $('resetTime').onclick = () => {
 
 /* ─── Alarm ──────────────────────────────────── */
 function fmtAlarm(hhmm) {
-  if (state.use24h) return hhmm;
-  const [h, m] = hhmm.split(':').map(Number);
-  return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`;
+  return hhmm;
 }
 
 $('setAlarm').onclick = () => {

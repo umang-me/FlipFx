@@ -141,12 +141,23 @@ body {
   width: 100%;
 }
 
+/* Wrapper for centering the clock */
+.clock-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  padding: clamp(10px, 2vw, 20px);
+}
+
 /* The root flipclock element */
 .flip-clock {
   font-family: 'Bebas Neue', sans-serif !important;
   font-size: var(--card-font) !important;
   gap: 0 !important;
   align-items: center !important;
+  justify-content: center !important;
 }
 
 /* Each digit group (hh, mm, ss) */
@@ -435,6 +446,19 @@ body {
 
 .accent-btn:active {
   transform: scale(.95);
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .flip-clock {
+    flex-direction: column !important;
+    gap: clamp(20px, 4vw, 40px) !important;
+    transition: all var(--t) !important;
+  }
+
+  .flip-clock-group:nth-child(3) {
+    display: none !important;
+  }
 }
 
 .accent-btn.muted {
